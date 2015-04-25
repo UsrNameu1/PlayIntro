@@ -7,20 +7,7 @@ import play.api.data.Forms._
 
 object Application extends Controller {
 
-  val form = Form[String](
-    "message" -> text
-  )
-
   def index = Action {
-    Ok(views.html.index.render("Write some words: ", form))
+    Ok(views.html.index.render("Database Sample"))
   }
-
-  def send = Action(implicit request =>
-    form.bindFromRequest().fold(
-      errors => BadRequest(views.html.index.render("Error: ", form)),
-      success = text => {
-        Ok(views.html.index.render("Write some words: " + text, form))
-      }
-    )
-  )
 }

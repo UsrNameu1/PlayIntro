@@ -1,12 +1,14 @@
-@(one: String, two: String, three: String)
+@(msg: String, form1: Form[String])
 
 @main("Welcome to Play") {
 
     <h1>Hello</h1>
-    <ol>
-        <li>@one</li>
-        <li>@two</li>
-        <li>@three</li>
-    </ol>
+    <p>@msg</p>
+    @helper.form(action = routes.Application.send) {
+        @(helper.inputText (
+            field = form1("message")
+        ))
+        <input type = "submit">
+    }
 
 }

@@ -1,9 +1,15 @@
-@(msg: String, datum: List[Message])
+@(msg: String, messages: List[models.Message])
 
 @main("Sample Page") {
 
     <h1>Hello</h1>
     <p>@msg</p>
-    <h2>@datum</h2>
+    <ul>
+        @messages.map { message =>
+            <li>@message.name</li>
+            <li>@message.mail</li>
+            <li>@message.message</li>
+        }
+    </ul>
 
 }

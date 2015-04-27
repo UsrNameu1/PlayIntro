@@ -1,17 +1,16 @@
 package models
 
-import java.sql.Timestamp
-import play.api.db.slick.Config.driver.simple._
+import java.sql.Date
+import scala.slick.driver.H2Driver.simple._
 
-case class Message(id: Long, name: String, mail: String, message: String, postDate: Timestamp)
+case class Message(id: Long, name: String, mail: String, message: String)
 
 class MessageTable(tag: Tag) extends Table[Message](tag, "messages") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name", O.NotNull)
   def mail = column[String]("mail", O.NotNull)
   def message = column[String]("message", O.NotNull)
-  def postDate = column[Timestamp]("postDate", O.NotNull)
-  def * = (id, name, mail, message, postDate) <> (Message.tupled, Message.unapply)
+  def * = (id, name, mail, message) <> (Message.tupled, Message.unapply)
 }
 
 object MessageDAO {

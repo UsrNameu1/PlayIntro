@@ -1,0 +1,21 @@
+@(msg: String, form: Form[models.Message])
+
+@main("Sample Page") {
+
+    <h1>Hello</h1>
+    <p>@msg</p>
+
+    @helper.form(action = routes.Application.create) {
+        @(helper.inputText(
+            field = form("name")
+        ))
+        @(helper.inputText(
+            field = form("mail")
+        ))
+        @(helper.textarea(
+            field = form("message")
+        ))
+
+        <input type = "submit">
+    }
+}

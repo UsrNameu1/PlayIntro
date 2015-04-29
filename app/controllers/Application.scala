@@ -13,7 +13,7 @@ object Application extends Controller {
   val messageForm = Form(
     mapping(
       "name" -> text,
-      "mail" -> text,
+      "mail" -> email,
       "message" -> text(maxLength = 100)
     )(
         (name: String, mail: String, message: String) =>
@@ -33,7 +33,7 @@ object Application extends Controller {
 
   def create = DBAction { implicit session =>
     messageForm.bindFromRequest().fold(
-      errors => BadRequest(views.html.add.render("Error", messageForm)),
+      errors => BadRequest(views.html.add.render("Error: " + errors.errors, messageForm)),
       message => {
         MessageDAO.create(message)
         Redirect("/")

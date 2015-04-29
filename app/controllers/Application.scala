@@ -16,7 +16,8 @@ object Application extends Controller {
       "mail" -> text,
       "message" -> text(maxLength = 100)
     )(
-        (name: String, mail: String, message: String) => new Message(0, name, mail, message)
+        (name: String, mail: String, message: String) =>
+          new Message(0, name, mail, message, new Date(System.currentTimeMillis()))
     )(
         (message: Message) => Some((message.name, message.mail, message.message))
     )

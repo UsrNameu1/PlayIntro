@@ -3,14 +3,15 @@ package models
 import java.sql.Date
 import scala.slick.driver.H2Driver.simple._
 
-case class Message(id: Long, name: String, mail: String, message: String)
+case class Message(id: Long, name: String, mail: String, message: String, createDate: Date)
 
 class MessageTable(tag: Tag) extends Table[Message](tag, "messages") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name", O.NotNull)
   def mail = column[String]("mail", O.NotNull)
   def message = column[String]("message", O.NotNull)
-  def * = (id, name, mail, message) <> (Message.tupled, Message.unapply)
+  def createDate = column[Date]("createDate", O.NotNull)
+  def * = (id, name, mail, message, createDate) <> (Message.tupled, Message.unapply)
 }
 
 object MessageDAO {

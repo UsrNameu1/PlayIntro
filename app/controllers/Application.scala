@@ -40,4 +40,22 @@ object Application extends Controller {
       }
     )
   }
+
+  def setitem = Action {
+    Ok(views.html.item.render("Input item id number", messageForm))
+  }
+
+  def edit = DBAction {
+    messageForm.bindFromRequest().fold(
+      errors => BadRequest(views.html.item.render("Error: input error" + errors.errors, messageForm)),
+      message => {
+        val id = message.id
+        val messageFound = MessageDAO.read(id)
+        messageFound match {
+          case Some(message) => Ok(views.html.edit.render("Edit message with ID = " + id, messageForm))
+          case None => Ok(views.html.item.render("Error: not found message for such id", messageForm))
+        }
+      }
+    )
+  }
 }

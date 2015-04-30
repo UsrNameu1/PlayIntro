@@ -17,8 +17,8 @@ class MessageTable(tag: Tag) extends Table[Message](tag, "messages") {
 object MessageDAO {
   lazy val messageQuery = TableQuery[MessageTable]
 
-  def read(id: Long)(implicit session: Session): Message = {
-    messageQuery.filter(_.id === id).first
+  def read(id: Long)(implicit session: Session): Option[Message]= {
+    messageQuery.filter(_.id === id).firstOption
   }
 
   def readAll(implicit session: Session): List[Message] = {

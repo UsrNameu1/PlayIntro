@@ -12,16 +12,15 @@ object Application extends Controller {
 
   val messageForm = Form(
     mapping(
+      "id" -> longNumber,
       "name" -> text,
       "mail" -> email,
-      "message" -> text(maxLength = 100)
-    )(
-        (name: String, mail: String, message: String) =>
-          new Message(0, name, mail, message, new Date(System.currentTimeMillis()))
-    )(
-        (message: Message) => Some((message.name, message.mail, message.message))
-    )
+      "message" -> text(maxLength = 100),
+      "createDate" -> default(sqlDate, new Date(System.currentTimeMillis()))
+    )(Message.apply)(Message.unapply)
   )
+
+  val idForm = Form("id" -> longNumber)
 
   def index = DBAction { implicit session =>
     Ok(views.html.index.render("Database Sample", MessageDAO.readAll))
@@ -42,19 +41,30 @@ object Application extends Controller {
   }
 
   def setitem = Action {
-    Ok(views.html.item.render("Input item id number", messageForm))
+    Ok(views.html.item.render("Input item id number ", idForm))
   }
 
-  def edit = DBAction {
-    messageForm.bindFromRequest().fold(
-      errors => BadRequest(views.html.item.render("Error: input error" + errors.errors, messageForm)),
-      message => {
-        val id = message.id
-        val messageFound = MessageDAO.read(id)
-        messageFound match {
-          case Some(message) => Ok(views.html.edit.render("Edit message with ID = " + id, messageForm))
-          case None => Ok(views.html.item.render("Error: not found message for such id", messageForm))
+  def edit = DBAction { implicit session =>
+    idForm.bindFromRequest().fold(
+      errors => BadRequest(views.html.item.render("Input error: " + errors.errors, idForm)),
+      id => {
+        MessageDAO.read(id) match {
+          case Some(messageFound) =>
+            messageForm.fill(messageFound)
+            Ok(views.html.edit.render("Edit message with ID = " + id, id, messageForm))
+          case None =>
+            Ok(views.html.item.render("Not Found error: ", idForm))
         }
+      }
+    )
+  }
+
+  def update = DBAction { implicit session =>
+    messageForm.bindFromRequest().fold(
+      errors => Ok(views.html.edit.render("Input error: " + errors.errors, 0, messageForm)),
+      message => {
+        MessageDAO.update(message)
+        Redirect("/")
       }
     )
   }

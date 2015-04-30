@@ -6,6 +6,8 @@
     <p>@msg</p>
 
     @helper.form(action = routes.Application.create) {
+
+        <input type="hidden" name="id" value="0">
         @(helper.inputText(
             field = form("name")
         ))

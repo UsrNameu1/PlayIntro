@@ -1,11 +1,11 @@
-@(msg: String, form1: Form[models.Message])
+@(msg: String, id: Long, form1: Form[models.Message])
 
 @main("Sample Page") {
     <h1>Update Data</h1>
     <p>@msg</p>
 
     @helper.form(action = routes.Application.update) {
-        <input type="hidden" value = "@form1("id").value" name = "id" />
+        <input type="hidden" value = "@id" name = "id" />
 
         @(helper.inputText(
             field = form1("name")

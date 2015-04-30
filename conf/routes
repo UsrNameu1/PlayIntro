@@ -15,3 +15,5 @@ POST    /create                     controllers.Application.create
 GET     /item                       controllers.Application.setitem
 
 POST    /edit                       controllers.Application.edit
+
+POST    /update                     controllers.Application.update

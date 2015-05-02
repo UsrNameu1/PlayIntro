@@ -50,8 +50,8 @@ object Application extends Controller {
       id => {
         MessageDAO.read(id) match {
           case Some(messageFound) =>
-            messageForm.fill(messageFound)
-            Ok(views.html.edit.render("Edit message with ID = " + id, id, messageForm))
+            val form = messageForm.fill(messageFound)
+            Ok(views.html.edit.render("Edit message with ID = " + id, id, form))
           case None =>
             Ok(views.html.item.render("Not Found error: ", idForm))
         }

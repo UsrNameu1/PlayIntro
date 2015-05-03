@@ -75,7 +75,7 @@ object Application extends Controller {
     idForm.bindFromRequest().fold(
       errors => BadRequest(views.html.delete.render("Input error: " + errors.errors, idForm)),
       id => MessageDAO.read(id) match {
-        case Some(messageFound) =>
+        case Some(_) =>
           MessageDAO.delete(id)
           Redirect("/")
         case None =>

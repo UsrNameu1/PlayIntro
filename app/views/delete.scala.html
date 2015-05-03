@@ -1,0 +1,14 @@
+@(msg: String, form1: Form[Long])
+
+@main("Sample Page") {
+    <h1>Delete message</h1>
+    <p>@msg</p>
+    @helper.form(action = routes.Application.remove) {
+
+        @(helper.inputText (
+            field = form1("id")
+        ))
+
+        <input type = "submit">
+    }
+}

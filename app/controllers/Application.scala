@@ -47,14 +47,12 @@ object Application extends Controller {
   def edit = DBAction { implicit session =>
     idForm.bindFromRequest().fold(
       errors => BadRequest(views.html.item.render("Input error: " + errors.errors, idForm)),
-      id => {
-        MessageDAO.read(id) match {
-          case Some(messageFound) =>
-            val form = messageForm.fill(messageFound)
-            Ok(views.html.edit.render("Edit message with ID = " + id, id, form))
-          case None =>
-            Ok(views.html.item.render("Not Found error: ", idForm))
-        }
+      id => MessageDAO.read(id) match {
+        case Some(messageFound) =>
+          val form = messageForm.fill(messageFound)
+          Ok(views.html.edit.render("Edit message with ID = " + id, id, form))
+        case None =>
+          Ok(views.html.item.render("Not Found error: ", idForm))
       }
     )
   }
@@ -65,6 +63,23 @@ object Application extends Controller {
       message => {
         MessageDAO.update(message)
         Redirect("/")
+      }
+    )
+  }
+
+  def delete = Action {
+    Ok(views.html.delete.render("Delete item id number ", idForm))
+  }
+
+  def remove = DBAction { implicit session =>
+    idForm.bindFromRequest().fold(
+      errors => BadRequest(views.html.delete.render("Input error: " + errors.errors, idForm)),
+      id => MessageDAO.read(id) match {
+        case Some(messageFound) =>
+          MessageDAO.delete(id)
+          Redirect("/")
+        case None =>
+          Ok(views.html.delete.render("Not Found error: ", idForm))
       }
     )
   }

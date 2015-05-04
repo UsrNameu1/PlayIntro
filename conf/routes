@@ -18,3 +18,5 @@ POST    /update                     controllers.Application.update
 
 GET     /delete                     controllers.Application.delete
 POST    /remove                     controllers.Application.remove
+
+GET     /find                       controllers.Application.find

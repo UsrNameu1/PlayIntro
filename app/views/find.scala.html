@@ -1,0 +1,21 @@
+@(msg: String, form1: Form[String], messages: List[models.Message])
+
+@main("Sample Page") {
+
+    <h1>Hello</h1>
+    <p>@msg</p>
+
+    @helper.form(action = routes.Application.find) {
+        @(helper.inputText (
+            field = form1("input")
+        ))
+        <input type = "submit">
+    }
+
+    <ul>
+        @messages.map { message =>
+            <li><p>@message</p></li>
+        }
+    </ul>
+
+}

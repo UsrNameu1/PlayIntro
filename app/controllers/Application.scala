@@ -22,8 +22,17 @@ object Application extends Controller {
 
   val idForm = Form("id" -> longNumber)
 
+  val findForm = Form("input" -> text)
+
   def index = DBAction { implicit session =>
     Ok(views.html.index.render("Database Sample", MessageDAO.readAll))
+  }
+
+  def find = DBAction { implicit session =>
+    findForm.bindFromRequest().fold(
+      errors => BadRequest(views.html.find.render("Error: " + errors.errors, findForm, List.empty)),
+      text => Ok(views.html.find.render("Found messages: ", findForm,  MessageDAO.readNameLike(text)))
+    )
   }
 
   def add = Action {

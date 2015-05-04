@@ -17,23 +17,21 @@ class MessageTable(tag: Tag) extends Table[Message](tag, "messages") {
 object MessageDAO {
   lazy val messageQuery = TableQuery[MessageTable]
 
-  def read(id: Long)(implicit session: Session): Option[Message]= {
+  def read(id: Long)(implicit session: Session) =
     messageQuery.filter(_.id === id).firstOption
-  }
 
-  def readAll(implicit session: Session): List[Message] = {
+  def readAll(implicit session: Session) =
     messageQuery.list
-  }
 
-  def create(message: Message)(implicit session: Session): Unit = {
+  def readNameLike(pattern: String)(implicit session: Session) =
+    messageQuery.filter(_.name like pattern).list
+
+  def create(message: Message)(implicit session: Session) =
     messageQuery.insert(message)
-  }
 
-  def update(message: Message)(implicit session: Session): Unit = {
+  def update(message: Message)(implicit session: Session) =
     messageQuery.filter(_.id === message.id).update(message)
-  }
 
-  def delete(id: Long)(implicit session: Session) = {
+  def delete(id: Long)(implicit session: Session) =
     messageQuery.filter(_.id === id).delete
-  }
 }
